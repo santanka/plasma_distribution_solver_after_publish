@@ -7,17 +7,17 @@ module boundary_and_initial_conditions
     ! initial condition
     !------------------
 
-    integer, parameter :: initial_fix_grid = 350
+    integer, parameter :: initial_fix_grid = 175
     !(initial_min_grid_1 < initial_fix_grid < initial_min_grid_2 => fix)
     !(initial_fix_grid <= initial_min_grid_1 or initial_min_grid_2 <= initial_fix_grid => not fix)
 
-    integer, parameter :: initial_min_grid_start = 50
-    integer, parameter :: initial_min_grid_end = 100
+    integer, parameter :: initial_min_grid_start = 112
+    integer, parameter :: initial_min_grid_end = initial_fix_grid
 
-    integer, parameter :: initial_grid_ionophere_middle_1 = 46
+    integer, parameter :: initial_grid_ionophere_middle_1 = 23
     ! 1 ~ initial_grid_ionophere_middle_1 - 1   initial_electrostatic_potential_ionosphere
     
-    integer, parameter :: initial_grid_middle_magnetosphere_1 = 224
+    integer, parameter :: initial_grid_middle_magnetosphere_1 = 112
     ! initial_grid_ionosphere_middle_1 ~ initial_grid_middle_magnetosphere_1 - 1    initial_electrostatic_potential_middle
 
     integer, parameter :: initial_grid_middle_magnetosphere_2 = real_grid_number + 2 - initial_grid_middle_magnetosphere_1
@@ -28,7 +28,7 @@ module boundary_and_initial_conditions
     ! initial_grid_ionophere_middle_2 ~ real_grid_number    initial_electrostatic_potential_ionosphere
 
     double precision, parameter :: initial_electrostatic_potential_ionosphere = 1d4     ![V] = [kg m2 s-3 A-1]
-    double precision, parameter :: initial_electrostatic_potential_middle = 5d3       ![V] = [kg m2 s-3 A-1]
+    double precision, parameter :: initial_electrostatic_potential_middle = 8d3       ![V] = [kg m2 s-3 A-1]
     double precision, parameter :: initial_electrostatic_potential_magnetosphere = 0d0  ![V] = [kg m2 s-3 A-1]
 
 

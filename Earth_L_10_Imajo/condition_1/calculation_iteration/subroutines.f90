@@ -65,10 +65,10 @@ subroutine make_spatial_grid(planet_mlat_1, planet_mlat_2, mlat, length2planet, 
         else if (count_i == real_grid_number) then
             mlat(count_i) = planet_mlat_2
         else
-            mlat_after = 0d0
+            mlat_after = mlat(count_i - 1)
             function1 = r_eq * (asinh(sqrt(3d0) * sin(mlat_after)) / 2d0 / sqrt(3d0) &
                 & + sin(mlat_after) * sqrt(5d0 - 3d0 * cos(2d0 * mlat_after)) / 2d0 / sqrt(2d0)) - coordinate_FA(count_i)
-            do while ( abs(function1) > 1d-10 )
+            do while ( abs(function1) > 1d-7 )
                 mlat_before = mlat_after
                 function2 = r_eq * cos(mlat_before) * sqrt(1d0 + 3d0 * sin(mlat_before)**2d0)
                 mlat_after = mlat_before - function1 / function2
@@ -1066,7 +1066,7 @@ subroutine Newton_method_for_electrostatic_potential(electrostatic_potential_dif
     integer, intent(in) :: initial_min_grid_1, initial_min_grid_2
     double precision, dimension(real_grid_number), intent(out) :: electrostatic_potential
 
-    integer :: count_i
+    integer :: count_i, min_loc(1)
     double precision :: update
     double precision, dimension(initial_min_grid_1 - 1) :: sorting_potential_1, sorting_potential_1_reverse
     double precision, dimension(real_grid_number - initial_min_grid_2) :: sorting_potential_2
@@ -1106,15 +1106,15 @@ subroutine Newton_method_for_electrostatic_potential(electrostatic_potential_dif
                 
             end if
 
-            if ( abs(update) <= 1d1 .and. update == update) then
+            if ( abs(update) <= 1d0 .and. update == update) then
                 electrostatic_potential(count_i) = electrostatic_potential_diff(1, count_i) - update
             
-            else if ( abs(update) > 1d1 .and. sqrt(convergence_number_diff(1, count_i)) <= 2d1 .and. update == update ) then
+            else if ( abs(update) > 1d0 .and. sqrt(convergence_number_diff(1, count_i)) <= 1d1 .and. update == update ) then
                 electrostatic_potential(count_i) = electrostatic_potential_diff(1, count_i) - update / abs(update) &
                     & * sqrt(convergence_number_diff(1, count_i))
 
-            else if ( abs(update) > 1d1 .and. sqrt(convergence_number_diff(1, count_i)) > 2d1 .and. update == update ) then
-                electrostatic_potential(count_i) = electrostatic_potential_diff(1, count_i) - update / abs(update) * 2d1
+            else if ( abs(update) > 1d0 .and. sqrt(convergence_number_diff(1, count_i)) > 1d1 .and. update == update ) then
+                electrostatic_potential(count_i) = electrostatic_potential_diff(1, count_i) - update / abs(update) * sqrt(1d1)
                 
             end if
 
@@ -1169,7 +1169,7 @@ subroutine Newton_method_for_electrostatic_potential(electrostatic_potential_dif
             if ( sorting_potential_3(count_i) > electrostatic_potential(initial_fix_grid) ) then
                 sorting_potential_3(count_i) = 2d0 * electrostatic_potential(initial_fix_grid) &
                     & - sorting_potential_3(count_i)
-                print *, count_i, sorting_potential_3(count_i)
+                !print *, count_i, sorting_potential_3(count_i)
             end if
             
         end do  !count_i
@@ -1178,7 +1178,7 @@ subroutine Newton_method_for_electrostatic_potential(electrostatic_potential_dif
 
             if ( sorting_potential_4(count_i) > electrostatic_potential(initial_fix_grid) ) then
                 sorting_potential_4(count_i) = 2d0 * electrostatic_potential(initial_fix_grid) &
-                    & - sorting_potential_4(count_i) 
+                    & - sorting_potential_4(count_i)
             end if
             
         end do  !count_i
@@ -1238,6 +1238,15 @@ subroutine Newton_method_for_electrostatic_potential(electrostatic_potential_dif
     end do  !count_i
     !$omp end do
     !$omp end parallel
+
+    do
+        min_loc = minloc(electrostatic_potential)
+        if ( electrostatic_potential(initial_min_grid_1) == electrostatic_potential(min_loc(1)) ) then
+            exit
+        else
+            electrostatic_potential(min_loc(1)) = electrostatic_potential(initial_min_grid_1)
+        end if
+    end do
 
 end subroutine Newton_method_for_electrostatic_potential
 !

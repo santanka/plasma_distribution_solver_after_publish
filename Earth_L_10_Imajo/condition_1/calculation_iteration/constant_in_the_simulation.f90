@@ -7,7 +7,7 @@ module constant_in_the_simulation
     ! grid number
     !------------
 
-    integer, parameter :: real_grid_number = 699    !for real space
+    integer, parameter :: real_grid_number = 349    !for real space
     integer, parameter :: adiabatic_invariant_grid_number = 60    !for adiabatic invariant
     integer, parameter :: parallel_grid_number = 30    !for a(parallel) (adiabatic_invariant_grid_number >= parallel_grid_number)
 

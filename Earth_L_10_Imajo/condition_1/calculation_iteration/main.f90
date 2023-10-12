@@ -21,6 +21,7 @@ program main
 
     call calculate_planet_mlat(planet_mlat_1, planet_mlat_2)
 
+
     !mlat, length2planet, length2satellite, coordinate_FA
     call make_spatial_grid(planet_mlat_1, planet_mlat_2, mlat, length2planet, length2satellite, coordinate_FA)
     
@@ -32,6 +33,8 @@ program main
     !magnetic_flux_density
     magnetic_flux_density = magnetic_constant * planet_dipole_moment / 4d0 / pi / (planet_l_shell * planet_radius)**3d0 &
         & * sqrt(1d0 + 3d0 * sin(mlat)**2d0) / cos(mlat)**6d0
+
+    print *, "initial setting of field is finished"
 
     
     !------------------
@@ -46,6 +49,14 @@ program main
 
         else if ( (initial_grid_ionophere_middle_1 <= count_i .and. count_i <= initial_grid_middle_magnetosphere_1 - 1) &
             & .or. (initial_grid_middle_magnetosphere_2 <= count_i .and. count_i <= initial_grid_ionophere_middle_2 - 1) ) then
+            
+            !if (initial_grid_ionophere_middle_1 <= count_i .and. count_i <= initial_grid_middle_magnetosphere_1 - 1) then
+            !    initial_electrostatic_potential(count_i) = initial_electrostatic_potential_middle &
+            !        & - dble((count_i - initial_grid_ionophere_middle_1) * 0.1d0)
+            !else if (initial_grid_middle_magnetosphere_2 <= count_i .and. count_i <= initial_grid_ionophere_middle_2 - 1) then
+            !    initial_electrostatic_potential(count_i) = initial_electrostatic_potential_middle &
+            !        & - dble((initial_grid_ionophere_middle_2 - 1 - count_i) * 0.1d0)
+            !end if
             initial_electrostatic_potential(count_i) = initial_electrostatic_potential_middle
         
         else if ( initial_grid_middle_magnetosphere_1 <= count_i .and. count_i <= initial_grid_middle_magnetosphere_2 - 1 ) then
@@ -56,6 +67,8 @@ program main
     end do  !count_i
 
     electrostatic_potential = initial_electrostatic_potential
+
+    print *, "initial condition is finished"
 
 
     !--------------------
@@ -78,6 +91,8 @@ program main
     boundary_temperature_para = boundary_temperature_para * elementary_charge
     boundary_number_density = initial_boundary_number_density
 
+    print *, "boundary conditions are finished"
+
 
     !-----------------------------
     ! Gaussian-Legendre quadrature
@@ -85,6 +100,8 @@ program main
 
     call calculate_zeropoints_and_weights_for_Gaussian(adiabatic_invariant_grid_number, zero_points_mu, weights_mu)
     call calculate_zeropoints_and_weights_for_Gaussian(parallel_grid_number, zero_points_parallel, weights_parallel)
+
+    print *, "Gaussian-Legendre quadrature is finished"
 
 
     !------------------------
@@ -94,10 +111,14 @@ program main
     call make_adiabatic_invariant(boundary_temperature_perp, magnetic_flux_density, injection_grid_number, zero_points_mu, &
         & adiabatic_invariant)
 
+    print *, "1st adiabatic invariant is finished"
+
 
     !----------------
     ! iteration start
     !----------------
+
+    print *, "iteration start"
     
 
     do count_min_position = initial_min_grid_start, initial_min_grid_end
@@ -107,7 +128,7 @@ program main
 
         count_iteration = 0
         count_iteration_timer = 0
-        convergence_number_sum_min = 1d1
+        convergence_number_sum_min = 1d4
         electrostatic_potential = initial_electrostatic_potential
         boundary_number_density = initial_boundary_number_density
 
@@ -227,7 +248,8 @@ program main
                 call date_and_time(dummy_1, dummy_2, dummy_3, date_time)
                 print *, count_min_position, count_iteration, count_iteration_timer, convergence_number_sum_min, &
                 & convergence_number_sum, omp_num, &
-                & electrostatic_potential(initial_min_grid_1), &
+                & electrostatic_potential(initial_min_grid_1), minval(electrostatic_potential), minloc(electrostatic_potential), &
+                & maxval(electrostatic_potential), maxloc(electrostatic_potential), &
                 & date_time(1), '/', date_time(2), '/', date_time(3), "  ", date_time(5), ":", date_time(6), &
                 & ":", date_time(7), ".", date_time(8)
             end if
