@@ -977,6 +977,28 @@ end subroutine make_convergence_number
 !
 !-----------------------------------------------------------------------------------------------------------------------------------
 !
+subroutine makedirs(input_dir)
+
+    implicit none
+    
+    character(len=*), intent(in) :: input_dir
+    logical :: exist
+
+    character(len=1024) :: command
+
+    inquire(file = trim(input_dir), exist = exist)
+
+    if (exist .eqv. .false.) then
+        command = "mkdir -p " // trim(input_dir)
+        command = trim(command)
+
+        call system(command)
+    end if
+
+end subroutine makedirs
+!
+!-----------------------------------------------------------------------------------------------------------------------------------
+!
 subroutine make_result_file_name(initial_min_grid_1, result_file)
     use constant_parameter
     use constant_in_the_simulation
@@ -985,7 +1007,8 @@ subroutine make_result_file_name(initial_min_grid_1, result_file)
     implicit none
     
     integer, intent(in) :: initial_min_grid_1
-    character(len = 185), intent(out) ::  result_file
+    character(len = *), intent(out) ::  result_file
+    character(len = 173) :: result_dir
     character(len = 3) :: grid_front, grid_back, file_number, min_grid, grid_fix
     character(len = 2) :: alpha_parallel_str, alpha_perp_str
     character(len = 1) :: boundary_file_number_str
@@ -998,6 +1021,11 @@ subroutine make_result_file_name(initial_min_grid_1, result_file)
     write(min_grid, "(I3.3)") initial_min_grid_1
     write(alpha_parallel_str, "(I2.2)") int(alpha_parallel)
     write(alpha_perp_str, "(I2.2)") int(alpha_perp)
+
+    result_dir = result_file_front // alpha_perp_str // "_parallel_" // alpha_parallel_str // "/grid_" // grid_front // "_" // &
+        & grid_back // "_" // grid_fix // "/boundary_condition_" // boundary_file_number_str // "/number_density_iteration"
+
+    call makedirs(result_dir)
 
     result_file = result_file_front // alpha_perp_str // "_parallel_" // alpha_parallel_str // "/grid_" // grid_front // "_" // &
         & grid_back // "_" // grid_fix // "/boundary_condition_" // boundary_file_number_str // "/number_density_iteration/min_" &
@@ -1361,6 +1389,3 @@ subroutine make_convergence_number_file_name(convergence_number_file)
         & "/number_density_iteration/convergence_number_sum_list.csv"
     
 end subroutine make_convergence_number_file_name
-!
-!-----------------------------------------------------------------------------------------------------------------------------------
-!
