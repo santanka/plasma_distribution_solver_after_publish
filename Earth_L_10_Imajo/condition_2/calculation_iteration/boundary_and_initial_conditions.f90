@@ -24,7 +24,7 @@ module boundary_and_initial_conditions
     ! initial_grid_middle_magnetosphere_2 ~ initial_grid_ionophere_middle_2 - 1     initial_electrostatic_potential_middle
     ! initial_grid_ionophere_middle_2 ~ real_grid_number    initial_electrostatic_potential_ionosphere
 
-    integer, parameter :: initial_min_grid_start = 159
+    integer, parameter :: initial_min_grid_start = initial_grid_middle_magnetosphere_1
     integer, parameter :: initial_min_grid_end = initial_fix_grid
 
     double precision, parameter :: initial_electrostatic_potential_ionosphere = 1d4     ![V] = [kg m2 s-3 A-1]
