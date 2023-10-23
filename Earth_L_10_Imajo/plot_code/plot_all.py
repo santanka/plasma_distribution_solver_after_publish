@@ -139,7 +139,7 @@ if (channel == 1):
     fig = plt.figure(figsize=(14, 28), dpi=100, tight_layout=True)
     gs = fig.add_gridspec(16, 7)
 
-    ax1 = fig.add_subplot(gs[0:5, 0:6], xlabel=r'geocentric distance [$\mathrm{R}_{\mathrm{E}}$]', ylabel=r'Number density $n$ [$\mathrm{cm^{-3}}$]', yscale='log', ylim=(1E-4, 1E6))
+    ax1 = fig.add_subplot(gs[0:5, 0:6], xlabel=r'Geocentric distance [$\mathrm{R}_{\mathrm{E}}$]', ylabel=r'Number density $n$ [$\mathrm{cm^{-3}}$]', yscale='log', ylim=(1E-4, 1E6))
     ax1.set_title(r'(a)', x=-0.05, y=1.05)
     #ax1.plot(length2planet_half_planet_radius, number_density_half[0, :]*1E-6 + number_density_half[3, :]*1E-6, c='orange', label=r'$\mathrm{O^+}$(I)', linestyle='dotted', linewidth='4')
     #ax1.plot(length2planet_half_planet_radius, number_density_half[1, :]*1E-6 + number_density_half[4, :]*1E-6, c='dimgrey', label=r'$\mathrm{H^+}$(I)', linestyle='dotted', linewidth='4')
@@ -157,7 +157,7 @@ if (channel == 1):
     ax1.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0)
 
 
-    ax2 = fig.add_subplot(gs[5:8, 0:], xlabel=r'geocentric distance [$\mathrm{R}_{\mathrm{E}}$]', ylabel=r'Electrostatic potential $\phi$ [$\mathrm{kV}$]')
+    ax2 = fig.add_subplot(gs[5:8, 0:], xlabel=r'Geocentric distance [$\mathrm{R}_{\mathrm{E}}$]', ylabel=r'Electrostatic potential $\phi$ [$\mathrm{kV}$]')
     ax2.set_title(r'(b)', x=-0.1, y=0.95)
     ax2_twinx = ax2.twinx()
     ax2_twinx.set_ylabel(r'Electron cyclotron frequency $\Omega_{e}$ [$\mathrm{MHz}$]')
@@ -171,14 +171,14 @@ if (channel == 1):
     h2, l2 = ax2_twinx.get_legend_handles_labels()
     ax2_twinx.legend(h1+h2, l1+l2)
 
-    ax3 = fig.add_subplot(gs[8:10, 0:], xlabel=r'geocentric distance [$\mathrm{R}_{\mathrm{E}}$]', ylabel=r'$\phi$ [$\mathrm{V}$]')
+    ax3 = fig.add_subplot(gs[8:10, 0:], xlabel=r'Geocentric distance [$\mathrm{R}_{\mathrm{E}}$]', ylabel=r'$\phi$ [$\mathrm{V}$]')
     ax3.set_title(r'(c)', x=-0.1, y=0.95)
     ax3.plot(length2planet_half_planet_radius, electrostatic_potential_half, linewidth='4', c='blue')
     ax3.set_ylim(-1, 27)
     ax3.minorticks_on()
     ax3.grid(which="both", alpha=0.3)
 
-    ax4 = fig.add_subplot(gs[11:, 0:2], yscale='log', xlabel=r'geocentric distance [$\mathrm{R}_{\mathrm{E}}$]', ylabel=r'Pressure [$\mathrm{nPa}$]')
+    ax4 = fig.add_subplot(gs[11:, 0:2], yscale='log', xlabel=r'Geocentric distance [$\mathrm{R}_{\mathrm{E}}$]', ylabel=r'Pressure [$\mathrm{nPa}$]')
     ax4.set_title(r'(d) Perpendicular $P_{\perp}$')
     ax4.plot(length2planet_half_planet_radius, all_perp_pressure_half*1E9, c='purple', label='all', linewidth='4', alpha=0.7)
     ax4.plot(length2planet_half_planet_radius, ion_perp_pressure_half*1E9, c='orange', label='ion', linewidth='4', alpha=0.7)
@@ -186,7 +186,7 @@ if (channel == 1):
     ax4.minorticks_on()
     ax4.grid(which="both", alpha=0.3)
 
-    ax5 = fig.add_subplot(gs[11:, 2:4], yscale='log', xlabel=r'geocentric distance [$\mathrm{R}_{\mathrm{E}}$]')
+    ax5 = fig.add_subplot(gs[11:, 2:4], yscale='log', xlabel=r'Geocentric distance [$\mathrm{R}_{\mathrm{E}}$]')
     ax5.set_title(r'(e) Parallel $P_{\parallel}$')
     ax5.plot(length2planet_half_planet_radius, all_para_pressure_half*1E9, c='purple', label='all', linewidth='4', alpha=0.7)
     ax5.plot(length2planet_half_planet_radius, ion_para_pressure_half*1E9, c='orange', label='ion', linewidth='4', alpha=0.7)
@@ -194,7 +194,7 @@ if (channel == 1):
     ax5.minorticks_on()
     ax5.grid(which="both", alpha=0.3)
 
-    ax6 = fig.add_subplot(gs[11:, 4:6], yscale='log', xlabel=r'geocentric distance [$\mathrm{R}_{\mathrm{E}}$]')
+    ax6 = fig.add_subplot(gs[11:, 4:6], yscale='log', xlabel=r'Geocentric distance [$\mathrm{R}_{\mathrm{E}}$]')
     ax6.set_title(r'(f) Total $P$')
     ax6.plot(length2planet_half_planet_radius, all_total_pressure_half*1E9, c='purple', label='all', linewidth='4', alpha=0.7)
     ax6.plot(length2planet_half_planet_radius, ion_total_pressure_half*1E9, c='orange', label='ion', linewidth='4', alpha=0.7)
