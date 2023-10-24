@@ -8,8 +8,8 @@ module reference_results_setting
 
     character(len=185), parameter :: &
     & reference_file ='../../../../../../../mnt/j/plasma_distribution_solver_after_publish/Earth_L_10_Imajo/' // &
-    &'alpha_perp_12_parallel_12/grid_014_109_175/boundary_condition_3/number_density_iteration/min_163.csv'
-    integer, parameter :: boundary_series_number = 8
+    &'alpha_perp_12_parallel_12/grid_014_109_175/boundary_condition_4/number_density_iteration/min_175.csv'
+    integer, parameter :: boundary_series_number = 10
 
 
     !------------
