@@ -15,10 +15,12 @@ channel = 1
 l_shell = 10E0
 series_number = 8
 
-#mass_series = np.array([2.677950266103E-26, 1.67262192369E-27, 9.1093837015E-31, 9.1093837015E-31, 2.677950266103E-26, 1.67262192369E-27, 9.1093837015E-31, 9.1093837015E-31, 1.67262192369E-27, 9.1093837015E-31])
-mass_series = np.array([2.677950266103E-26, 1.67262192369E-27, 9.1093837015E-31, 2.677950266103E-26, 1.67262192369E-27, 9.1093837015E-31, 1.67262192369E-27, 9.1093837015E-31])
-#charge_series = np.array([1E0, 1E0, -1E0, -1E0, 1E0, 1E0, -1E0, -1E0, 1E0, -1E0])
-charge_series = np.array([1E0, 1E0, -1E0, 1E0, 1E0, -1E0, 1E0, -1E0])
+if (series_number == 10):
+    mass_series = np.array([2.677950266103E-26, 1.67262192369E-27, 9.1093837015E-31, 9.1093837015E-31, 2.677950266103E-26, 1.67262192369E-27, 9.1093837015E-31, 9.1093837015E-31, 1.67262192369E-27, 9.1093837015E-31])
+    charge_series = np.array([1E0, 1E0, -1E0, -1E0, 1E0, 1E0, -1E0, -1E0, 1E0, -1E0])
+elif (series_number == 8):
+    mass_series = np.array([2.677950266103E-26, 1.67262192369E-27, 9.1093837015E-31, 2.677950266103E-26, 1.67262192369E-27, 9.1093837015E-31, 1.67262192369E-27, 9.1093837015E-31])
+    charge_series = np.array([1E0, 1E0, -1E0, 1E0, 1E0, -1E0, 1E0, -1E0])
 
 dir_name = f'/mnt/j/plasma_distribution_solver_after_publish/Earth_L_10_Imajo/alpha_perp_12_parallel_12/grid_{str(grid_ionosphere_middle).zfill(3)}_{str(grid_middle_magnetosphere).zfill(3)}_{str(grid_fix).zfill(3)}/'
 dir_BC_name = f'boundary_condition_{str(BC_number)}/'
@@ -141,23 +143,25 @@ if (channel == 1):
 
     ax1 = fig.add_subplot(gs[0:5, 0:6], xlabel=r'Geocentric distance [$\mathrm{R}_{\mathrm{E}}$]', ylabel=r'Number density $n$ [$\mathrm{cm^{-3}}$]', yscale='log', ylim=(1E-4, 1E6))
     ax1.set_title(r'(a)', x=-0.05, y=1.05)
-    ax1.plot(length2planet_half_planet_radius, number_density_half[0, :]*1E-6 + number_density_half[3, :]*1E-6, c='orange', label=r'$\mathrm{O^+}$(I)', linestyle='dotted', linewidth='4')
-    ax1.plot(length2planet_half_planet_radius, number_density_half[1, :]*1E-6 + number_density_half[4, :]*1E-6, c='dimgrey', label=r'$\mathrm{H^+}$(I)', linestyle='dotted', linewidth='4')
-    ax1.plot(length2planet_half_planet_radius, number_density_half[2, :]*1E-6 + number_density_half[5, :]*1E-6, c='blue', label=r'$\mathrm{e^-}$(I)', linestyle='dotted', linewidth='4')
-    ax1.plot(length2planet_half_planet_radius, number_density_half[6, :]*1E-6, c='purple', label=r'$\mathrm{H^+}$(M)', linestyle='dotted', linewidth='4')
-    ax1.plot(length2planet_half_planet_radius, number_density_half[7, :]*1E-6, c='green', label=r'$\mathrm{e^-}$(M)', linestyle='dotted', linewidth='4')
-    #ax1.plot(length2planet_half_planet_radius, number_density_half[0, :]*1E-6 + number_density_half[4, :]*1E-6, c='orange', label=r'$\mathrm{O^+}$(I)', linestyle='dotted', linewidth='4')
-    #ax1.plot(length2planet_half_planet_radius, number_density_half[1, :]*1E-6 + number_density_half[5, :]*1E-6, c='dimgrey', label=r'$\mathrm{H^+}$(I)', linestyle='dotted', linewidth='4')
-    #ax1.plot(length2planet_half_planet_radius, number_density_half[2, :]*1E-6 + number_density_half[6, :]*1E-6, c='blue', label=r'cold $\mathrm{e^-}$(I)', linestyle='dotted', linewidth='4')
-    #ax1.plot(length2planet_half_planet_radius, number_density_half[3, :]*1E-6 + number_density_half[7, :]*1E-6, c='hotpink', label=r'hot $\mathrm{e^-}$(I)', linestyle='dotted', linewidth='4')
-    #ax1.plot(length2planet_half_planet_radius, number_density_half[8, :]*1E-6, c='purple', label=r'$\mathrm{H^+}$(M)', linestyle='dotted', linewidth='4')
-    #ax1.plot(length2planet_half_planet_radius, number_density_half[9, :]*1E-6, c='green', label=r'$\mathrm{e^-}$(M)', linestyle='dotted', linewidth='4')
+    if (series_number == 8):
+        ax1.plot(length2planet_half_planet_radius, number_density_half[0, :]*1E-6 + number_density_half[3, :]*1E-6, c='orange', label=r'$\mathrm{O^+}$(I)', linestyle='dotted', linewidth='4')
+        ax1.plot(length2planet_half_planet_radius, number_density_half[1, :]*1E-6 + number_density_half[4, :]*1E-6, c='dimgrey', label=r'$\mathrm{H^+}$(I)', linestyle='dotted', linewidth='4')
+        ax1.plot(length2planet_half_planet_radius, number_density_half[2, :]*1E-6 + number_density_half[5, :]*1E-6, c='blue', label=r'$\mathrm{e^-}$(I)', linestyle='dotted', linewidth='4')
+        ax1.plot(length2planet_half_planet_radius, number_density_half[6, :]*1E-6, c='purple', label=r'$\mathrm{H^+}$(M)', linestyle='dotted', linewidth='4')
+        ax1.plot(length2planet_half_planet_radius, number_density_half[7, :]*1E-6, c='green', label=r'$\mathrm{e^-}$(M)', linestyle='dotted', linewidth='4')
+    elif (series_number == 10):
+        ax1.plot(length2planet_half_planet_radius, number_density_half[0, :]*1E-6 + number_density_half[4, :]*1E-6, c='orange', label=r'$\mathrm{O^+}$(I)', linestyle='dotted', linewidth='4')
+        ax1.plot(length2planet_half_planet_radius, number_density_half[1, :]*1E-6 + number_density_half[5, :]*1E-6, c='dimgrey', label=r'$\mathrm{H^+}$(I)', linestyle='dotted', linewidth='4')
+        ax1.plot(length2planet_half_planet_radius, number_density_half[2, :]*1E-6 + number_density_half[6, :]*1E-6, c='blue', label=r'cold $\mathrm{e^-}$(I)', linestyle='dotted', linewidth='4')
+        ax1.plot(length2planet_half_planet_radius, number_density_half[3, :]*1E-6 + number_density_half[7, :]*1E-6, c='hotpink', label=r'hot $\mathrm{e^-}$(I)', linestyle='dotted', linewidth='4')
+        ax1.plot(length2planet_half_planet_radius, number_density_half[8, :]*1E-6, c='purple', label=r'$\mathrm{H^+}$(M)', linestyle='dotted', linewidth='4')
+        ax1.plot(length2planet_half_planet_radius, number_density_half[9, :]*1E-6, c='green', label=r'$\mathrm{e^-}$(M)', linestyle='dotted', linewidth='4')
     ax1.minorticks_on()
     ax1.grid(which='both', alpha=0.3)
     ax1.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0)
 
 
-    ax2 = fig.add_subplot(gs[5:8, 0:], xlabel=r'Geocentric distance [$\mathrm{R}_{\mathrm{E}}$]', ylabel=r'Electrostatic potential $\phi$ [$\mathrm{kV}$]')
+    ax2 = fig.add_subplot(gs[5:8, 0:6], xlabel=r'Geocentric distance [$\mathrm{R}_{\mathrm{E}}$]', ylabel=r'Electrostatic potential $\phi$ [$\mathrm{kV}$]')
     ax2.set_title(r'(b)', x=-0.1, y=0.95)
     ax2_twinx = ax2.twinx()
     ax2_twinx.set_ylabel(r'Electron cyclotron frequency $\Omega_{e}$ [$\mathrm{MHz}$]')
@@ -171,7 +175,7 @@ if (channel == 1):
     h2, l2 = ax2_twinx.get_legend_handles_labels()
     ax2_twinx.legend(h1+h2, l1+l2)
 
-    ax3 = fig.add_subplot(gs[8:10, 0:], xlabel=r'Geocentric distance [$\mathrm{R}_{\mathrm{E}}$]', ylabel=r'$\phi$ [$\mathrm{V}$]')
+    ax3 = fig.add_subplot(gs[8:10, 0:6], xlabel=r'Geocentric distance [$\mathrm{R}_{\mathrm{E}}$]', ylabel=r'$\phi$ [$\mathrm{V}$]')
     ax3.set_title(r'(c)', x=-0.1, y=0.95)
     ax3.plot(length2planet_half_planet_radius, electrostatic_potential_half, linewidth='4', c='blue')
     ax3.set_ylim(-1, 27)

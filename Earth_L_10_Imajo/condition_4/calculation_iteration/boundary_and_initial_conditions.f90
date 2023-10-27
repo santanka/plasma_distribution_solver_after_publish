@@ -28,7 +28,7 @@ module boundary_and_initial_conditions
     integer, parameter :: initial_min_grid_end = initial_fix_grid
 
     double precision, parameter :: initial_electrostatic_potential_ionosphere = 1d4     ![V] = [kg m2 s-3 A-1]
-    double precision, parameter :: initial_electrostatic_potential_middle = 2d3       ![V] = [kg m2 s-3 A-1]
+    double precision, parameter :: initial_electrostatic_potential_middle = 1d3       ![V] = [kg m2 s-3 A-1]
     double precision, parameter :: initial_electrostatic_potential_magnetosphere = 0d0  ![V] = [kg m2 s-3 A-1]
 
 

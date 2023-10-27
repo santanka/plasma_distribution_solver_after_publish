@@ -37,11 +37,11 @@ module boundary_and_initial_conditions
     !-------------------
 
     character(len=25), parameter :: boundary_file_front = '../boundary_condition.csv'
-    integer, parameter :: boundary_file_number = 2  !boundary_file
-    integer, parameter :: boundary_series_number = 10
+    integer, parameter :: boundary_file_number = 5  !boundary_file
+    integer, parameter :: boundary_series_number = 8
     integer, parameter :: boundary_ionosphere_1_variable_species = 3
-    integer, parameter :: boundary_ionosphere_2_variable_species = 7
-    integer, parameter :: boundary_magnetosphere_variable_species = 9
+    integer, parameter :: boundary_ionosphere_2_variable_species = 6
+    integer, parameter :: boundary_magnetosphere_variable_species = 7
     !(1 <= boundary_magnetosphere_variable_species <= boundary_series_number  =>  turn on,  else  =>  turn off)
 
 
