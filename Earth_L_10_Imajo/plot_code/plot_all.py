@@ -7,13 +7,13 @@ grid_ionosphere_middle = 14
 grid_middle_magnetosphere = 109
 grid_fix = 175
 
-BC_number = 5
-min_number = 109
+BC_number = 6
+min_number = 110
 
 channel = 1
 
 l_shell = 10E0
-series_number = 8
+series_number = 10
 
 if (series_number == 10):
     mass_series = np.array([2.677950266103E-26, 1.67262192369E-27, 9.1093837015E-31, 9.1093837015E-31, 2.677950266103E-26, 1.67262192369E-27, 9.1093837015E-31, 9.1093837015E-31, 1.67262192369E-27, 9.1093837015E-31])
