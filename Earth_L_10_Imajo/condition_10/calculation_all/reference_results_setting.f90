@@ -6,21 +6,21 @@ module reference_results_setting
     ! reference results file
     !-----------------------
 
-    character(len=185), parameter :: &
+    character(len=186), parameter :: &
     & reference_file ='../../../../../../../mnt/j/plasma_distribution_solver_after_publish/Earth_L_10_Imajo/' // &
-    &'alpha_perp_12_parallel_12/grid_014_109_175/boundary_condition_9/number_density_iteration/min_175.csv'
-    integer, parameter :: boundary_series_number = 10
+    &'alpha_perp_12_parallel_12/grid_014_109_175/boundary_condition_10/number_density_iteration/min_135.csv'
+    integer, parameter :: boundary_series_number = 12
 
 
     !------------
     ! result file
     !------------
 
-    character(len=149), parameter :: result_file_front = reference_file(1:149)
+    character(len=150), parameter :: result_file_front = reference_file(1:150)
     character(len=8), parameter :: result_file_middle = 'all/all_'
-    character(len=7), parameter :: result_file_back = reference_file(179:185)
-    character(len=153), parameter :: result_dir = result_file_front // result_file_middle(1:4)
-    character(len=164), parameter :: result_file = result_file_front // result_file_middle // result_file_back
+    character(len=7), parameter :: result_file_back = reference_file(180:186)
+    character(len=154), parameter :: result_dir = result_file_front // result_file_middle(1:4)
+    character(len=165), parameter :: result_file = result_file_front // result_file_middle // result_file_back
 
     ! bsn -> boundary_series_number
     ! coordinate_FA(1), length2planet(2), mlat_rad(3), mlat_degree(4), magnetic_flux_density(5), initial_electrostatic_potential(6),
