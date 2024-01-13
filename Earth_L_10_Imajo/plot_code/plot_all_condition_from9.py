@@ -8,7 +8,7 @@ grid_middle_magnetosphere = 109
 grid_fix = 175
 
 BC_number = 11
-min_number = 155
+min_number = 174
 
 channel = 1
 

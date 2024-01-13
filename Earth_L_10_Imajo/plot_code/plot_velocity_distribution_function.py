@@ -9,9 +9,9 @@ grid_middle_magnetosphere = 109
 grid_fix = 175
 
 BC_number = 11
-min_number = 155
+min_number = 174
 
-grid_number = 277
+grid_number = 242
 
 series_1 = 10
 series_1_name = r'$\mathrm{e^{-}}$ (Magnetosphere) ($v_{\parallel i} > 0$)'

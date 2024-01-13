@@ -494,15 +494,14 @@ subroutine make_amax(potential_plus_Bmu, injection_grid_number, boundary_tempera
             !$omp parallel private(count_mu, count4max, Emax_grid, energy_difference, energy_difference_boundary)
             !$omp do
             do count_i = 1, real_grid_number
-                if (count_i < drop_point_min .or. drop_point_max < count_i) then
+                if (count_i == 1 .or. count_i == real_grid_number) then
                     amax(count_s, count_i, :) = amin(count_s, count_i, :)
-                    alim(count_s, count_i, :) = amin(count_s, count_i, :)
                 else
                     if (count_i /= injection_grid_number(count_s)) then
                         do count_mu = 1, adiabatic_invariant_grid_number
                             if ( count_i < injection_grid_number(count_s) ) then
-                                Emax_grid = drop_point_min - 1
-                                do count4max = drop_point_min - 1, count_i - 1
+                                Emax_grid = 1
+                                do count4max = 1, count_i - 1
                                     if ( potential_plus_Bmu(count_s, count4max, count_mu) &
                                         & > potential_plus_Bmu(count_s, Emax_grid, count_mu) ) then
                                         Emax_grid = count4max
@@ -512,7 +511,7 @@ subroutine make_amax(potential_plus_Bmu, injection_grid_number, boundary_tempera
 
                             else if ( count_i > injection_grid_number(count_s) ) then
                                 Emax_grid = count_i + 1
-                                do count4max = count_i + 1, drop_point_max + 1
+                                do count4max = count_i + 1, real_grid_number
 
                                     if ( potential_plus_Bmu(count_s, count4max, count_mu) &
                                         & > potential_plus_Bmu(count_s, Emax_grid, count_mu) ) then
@@ -527,7 +526,7 @@ subroutine make_amax(potential_plus_Bmu, injection_grid_number, boundary_tempera
                             energy_difference_boundary = potential_plus_Bmu(count_s, injection_grid_number(count_s), count_mu) &
                                 & - potential_plus_Bmu(count_s, count_i, count_mu) + boundary_temperature_para(count_s) &
                                 & * alpha_parallel
-                            
+
                             if ( energy_difference <= amin(count_s, count_i, count_mu)**2d0 .or. &
                                 & energy_difference_boundary <= amin(count_s, count_i, count_mu)**2d0 ) then
                                 amax(count_s, count_i, count_mu) = amin(count_s, count_i, count_mu)
@@ -535,7 +534,7 @@ subroutine make_amax(potential_plus_Bmu, injection_grid_number, boundary_tempera
                             else if ( amin(count_s, count_i, count_mu)**2d0 < energy_difference .and. &
                                 & energy_difference <= energy_difference_boundary ) then
                                 amax(count_s, count_i, count_mu) = sqrt(energy_difference)
-                                
+
                             else if ( amin(count_s, count_i, count_mu)**2d0 < energy_difference .and. &
                                 & energy_difference > energy_difference_boundary ) then
                                 amax(count_s, count_i, count_mu) = sqrt(energy_difference_boundary)
@@ -544,13 +543,11 @@ subroutine make_amax(potential_plus_Bmu, injection_grid_number, boundary_tempera
 
                         end do  !count_mu
 
-                        alim(count_s, count_i, :) = amax(count_s, count_i, :)
-                    
                     else if ( count_i == injection_grid_number(count_s) ) then
 
                         do count_mu = 1, adiabatic_invariant_grid_number
-                            Emax_grid = drop_point_min - 1
-                            do count4max = drop_point_min - 1, count_i - 1
+                            Emax_grid = 1
+                            do count4max = 1, count_i - 1
                                 if ( potential_plus_Bmu(count_s, count4max, count_mu) &
                                     & > potential_plus_Bmu(count_s, Emax_grid, count_mu) ) then
                                     Emax_grid = count4max
@@ -571,7 +568,7 @@ subroutine make_amax(potential_plus_Bmu, injection_grid_number, boundary_tempera
                             end if
 
                             Emax_grid = count_i + 1
-                            do count4max = count_i + 1, drop_point_max + 1
+                            do count4max = count_i + 1, real_grid_number
                                 if ( potential_plus_Bmu(count_s, count4max, count_mu) &
                                     & > potential_plus_Bmu(count_s, Emax_grid, count_mu) ) then
                                     Emax_grid = count4max
@@ -591,18 +588,18 @@ subroutine make_amax(potential_plus_Bmu, injection_grid_number, boundary_tempera
                                 amax(count_s, count_i, count_mu) = sqrt(energy_difference_boundary)
                             end if
                         end do  !count_mu
-                    
-                    end if
 
-                    do count_mu = 1, adiabatic_invariant_grid_number
-                        if ( amax(count_s, count_i, count_mu) < alim(count_s, count_i, count_mu) ) then
-                            alim(count_s, count_i, count_mu) = amax(count_s, count_i, count_mu)
-                        else if ( amax(count_s, count_i, count_mu) > alim(count_s, count_i, count_mu) ) then
-                            amax(count_s, count_i, count_mu) = alim(count_s, count_i, count_mu)
-                        end if
-                    end do  !count_mu
-                
+                    end if
                 end if
+
+                do count_mu = 1, adiabatic_invariant_grid_number
+                    if ( amax(count_s, count_i, count_mu) < alim(count_s, count_i, count_mu) ) then
+                        alim(count_s, count_i, count_mu) = amax(count_s, count_i, count_mu)
+                    else if ( amax(count_s, count_i, count_mu) > alim(count_s, count_i, count_mu) ) then
+                        amax(count_s, count_i, count_mu) = alim(count_s, count_i, count_mu)
+                    end if
+                end do  !count_mu
+
             
             end do  !count_i
             !$omp end do

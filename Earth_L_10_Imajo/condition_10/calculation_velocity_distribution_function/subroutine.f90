@@ -279,209 +279,74 @@ subroutine make_amax(particle_mass, potential_plus_Bmu, injection_grid_number, b
 
     do count_s = 1, boundary_series_number
 
-        if ( injection_grid_number(count_s) < initial_grid_ionosphere_middle_1 .or. &
-            & ( initial_grid_middle_magnetosphere_1 <= injection_grid_number(count_s) &
-            & .and. injection_grid_number(count_s) < initial_grid_middle_magnetosphere_2 ) .or. &
-            & initial_grid_ionosphere_middle_2 <= injection_grid_number(count_s) ) then
-        
-            !$omp parallel private(count_mu, count4max, Emax_grid, energy_difference, energy_difference_boundary)
-            !$omp do
-            do count_i = 1, real_grid_number
+        !$omp parallel private(count_mu, count4max, Emax_grid, energy_difference, energy_difference_boundary)
+        !$omp do
+        do count_i = 1, real_grid_number
 
-                if ( (count_i == 1 .and. injection_grid_number(count_s) /= 1) &
-                    & .or. (count_i == real_grid_number .and. injection_grid_number(count_s) /= real_grid_number) ) then
-                    amax(count_s, count_i, :) = amin(count_s, count_i, :)
+            if ( (count_i == 1 .and. injection_grid_number(count_s) /= 1) &
+                & .or. (count_i == real_grid_number .and. injection_grid_number(count_s) /= real_grid_number) ) then
+                amax(count_s, count_i, :) = amin(count_s, count_i, :)
 
-                else if ( count_i == injection_grid_number(count_s) .and. injection_grid_number(count_s) /= 1 &
-                    & .and. injection_grid_number(count_s) /= real_grid_number ) then
-                    amax(count_s, count_i, :) = alim(count_s, count_i, :)
+            else if ( count_i == injection_grid_number(count_s) .and. injection_grid_number(count_s) /= 1 &
+                & .and. injection_grid_number(count_s) /= real_grid_number ) then
+                amax(count_s, count_i, :) = alim(count_s, count_i, :)
                     
-                else
-                    do count_mu = 1, adiabatic_invariant_grid_number
-
-                        if ( count_i < injection_grid_number(count_s) .or. injection_grid_number(count_s) == real_grid_number ) then
-                            Emax_grid = 1
-                            do count4max = 1, count_i - 1
-
-                                if ( potential_plus_Bmu(count_s, count4max, count_mu) &
-                                    & > potential_plus_Bmu(count_s, Emax_grid, count_mu) ) then
-                                    Emax_grid = count4max
-                                end if
-
-                            end do  !count4max
-                        
-                        else if (count_i > injection_grid_number(count_s) .or. injection_grid_number(count_s) == 1) then
-                            Emax_grid = count_i + 1
-                            do count4max = count_i + 1, real_grid_number
-
-                                if ( potential_plus_Bmu(count_s, count4max, count_mu) &
-                                & > potential_plus_Bmu(count_s, Emax_grid, count_mu) ) then
-                                    Emax_grid = count4max
-                                end if
-
-                            end do  !count4max
-
-                        end if
-
-                        energy_difference = potential_plus_Bmu(count_s, Emax_grid, count_mu) &
-                            & - potential_plus_Bmu(count_s, count_i, count_mu)
-
-                        energy_difference_boundary = potential_plus_Bmu(count_s, injection_grid_number(count_s), count_mu) &
-                            & - potential_plus_Bmu(count_s, count_i, count_mu) &
-                            & + 5d-1 * particle_mass(count_s) * (alpha_lightspeed * speed_of_light)**2d0
-
-                        if ( energy_difference <= amin(count_s, count_i, count_mu)**2d0 .or. &
-                            & energy_difference_boundary <= amin(count_s, count_i, count_mu)**2d0 ) then
-                            amax(count_s, count_i, count_mu) = amin(count_s, count_i, count_mu)
-
-                        else if ( amin(count_s, count_i, count_mu)**2d0 < energy_difference .and. &
-                            & energy_difference <= energy_difference_boundary ) then
-                            amax(count_s, count_i, count_mu) = sqrt(energy_difference)
-                            
-                        else if ( amin(count_s, count_i, count_mu)**2d0 < energy_difference .and. &
-                            & energy_difference > energy_difference_boundary ) then
-                            amax(count_s, count_i, count_mu) = sqrt(energy_difference_boundary)
-
-                        end if
-
-                    end do  !count_mu
-
-                end if
-
-            end do  !count_i
-            !$omp end do
-            !$omp end parallel
-        
-        else if ( ( initial_grid_ionosphere_middle_1 <= injection_grid_number(count_s) &
-            & .and. injection_grid_number(count_s) < initial_grid_middle_magnetosphere_1 ) &
-            & .or. ( initial_grid_middle_magnetosphere_2 <= injection_grid_number(count_s) &
-            & .and. injection_grid_number(count_s) < initial_grid_ionosphere_middle_2 ) ) then
-
-            if ( initial_grid_ionosphere_middle_1 <= injection_grid_number(count_s) &
-            & .and. injection_grid_number(count_s) < initial_grid_middle_magnetosphere_1 ) then
-                drop_point_min = initial_grid_ionosphere_middle_1
-                drop_point_max = initial_grid_middle_magnetosphere_1 - 1
-            else if ( initial_grid_middle_magnetosphere_2 <= injection_grid_number(count_s) &
-            & .and. injection_grid_number(count_s) < initial_grid_ionosphere_middle_2 ) then
-                drop_point_min = initial_grid_middle_magnetosphere_2
-                drop_point_max = initial_grid_ionosphere_middle_2 - 1
-            end if
-
-            !$omp parallel private(count_mu, count4max, Emax_grid, energy_difference, energy_difference_boundary)
-            !$omp do
-            do count_i = 1, real_grid_number
-                if (count_i == 1 .or. count_i == real_grid_number) then
-                    amax(count_s, count_i, :) = amin(count_s, count_i, :)
-                else
-                    if (count_i /= injection_grid_number(count_s)) then
-                        do count_mu = 1, adiabatic_invariant_grid_number
-                            if ( count_i < injection_grid_number(count_s) ) then
-                                Emax_grid = 1
-                                do count4max = 1, count_i - 1
-                                    if ( potential_plus_Bmu(count_s, count4max, count_mu) &
-                                        & > potential_plus_Bmu(count_s, Emax_grid, count_mu) ) then
-                                        Emax_grid = count4max
-                                    end if
-
-                                end do  !count4max
-
-                            else if ( count_i > injection_grid_number(count_s) ) then
-                                Emax_grid = count_i + 1
-                                do count4max = count_i + 1, real_grid_number
-
-                                    if ( potential_plus_Bmu(count_s, count4max, count_mu) &
-                                        & > potential_plus_Bmu(count_s, Emax_grid, count_mu) ) then
-                                        Emax_grid = count4max
-                                    end if
-
-                                end do  !count4max
-                            end if
-
-                            energy_difference = potential_plus_Bmu(count_s, Emax_grid, count_mu) &
-                                & - potential_plus_Bmu(count_s, count_i, count_mu)
-                            energy_difference_boundary = potential_plus_Bmu(count_s, injection_grid_number(count_s), count_mu) &
-                                & - potential_plus_Bmu(count_s, count_i, count_mu) &
-                                & + 5d-1 * particle_mass(count_s) * (alpha_lightspeed * speed_of_light)**2d0
-
-                            if ( energy_difference <= amin(count_s, count_i, count_mu)**2d0 .or. &
-                                & energy_difference_boundary <= amin(count_s, count_i, count_mu)**2d0 ) then
-                                amax(count_s, count_i, count_mu) = amin(count_s, count_i, count_mu)
-
-                            else if ( amin(count_s, count_i, count_mu)**2d0 < energy_difference .and. &
-                                & energy_difference <= energy_difference_boundary ) then
-                                amax(count_s, count_i, count_mu) = sqrt(energy_difference)
-
-                            else if ( amin(count_s, count_i, count_mu)**2d0 < energy_difference .and. &
-                                & energy_difference > energy_difference_boundary ) then
-                                amax(count_s, count_i, count_mu) = sqrt(energy_difference_boundary)
-
-                            end if
-
-                        end do  !count_mu
-
-                    else if ( count_i == injection_grid_number(count_s) ) then
-
-                        do count_mu = 1, adiabatic_invariant_grid_number
-                            Emax_grid = 1
-                            do count4max = 1, count_i - 1
-                                if ( potential_plus_Bmu(count_s, count4max, count_mu) &
-                                    & > potential_plus_Bmu(count_s, Emax_grid, count_mu) ) then
-                                    Emax_grid = count4max
-                                end if
-                            end do  !count4max
-                            energy_difference = potential_plus_Bmu(count_s, Emax_grid, count_mu) &
-                                & - potential_plus_Bmu(count_s, count_i, count_mu)
-                            energy_difference_boundary = 5d-1 * particle_mass(count_s) * (alpha_lightspeed * speed_of_light)**2d0
-                            if ( energy_difference <= amin(count_s, count_i, count_mu)**2d0 .or. &
-                                & energy_difference_boundary <= amin(count_s, count_i, count_mu)**2d0 ) then
-                                alim(count_s, count_i, count_mu) = amin(count_s, count_i, count_mu)
-                            else if ( amin(count_s, count_i, count_mu)**2d0 < energy_difference .and. &
-                                & energy_difference <= energy_difference_boundary ) then
-                                alim(count_s, count_i, count_mu) = sqrt(energy_difference)
-                            else if ( amin(count_s, count_i, count_mu)**2d0 < energy_difference .and. &
-                                & energy_difference > energy_difference_boundary ) then
-                                alim(count_s, count_i, count_mu) = sqrt(energy_difference_boundary)
-                            end if
-
-                            Emax_grid = count_i + 1
-                            do count4max = count_i + 1, real_grid_number
-                                if ( potential_plus_Bmu(count_s, count4max, count_mu) &
-                                    & > potential_plus_Bmu(count_s, Emax_grid, count_mu) ) then
-                                    Emax_grid = count4max
-                                end if
-                            end do  !count4max
-                            energy_difference = potential_plus_Bmu(count_s, Emax_grid, count_mu) &
-                                & - potential_plus_Bmu(count_s, count_i, count_mu)
-                            energy_difference_boundary = 5d-1 * particle_mass(count_s) * (alpha_lightspeed * speed_of_light)**2d0
-                            if ( energy_difference <= amin(count_s, count_i, count_mu)**2d0 .or. &
-                                & energy_difference_boundary <= amin(count_s, count_i, count_mu)**2d0 ) then
-                                amax(count_s, count_i, count_mu) = amin(count_s, count_i, count_mu)
-                            else if ( amin(count_s, count_i, count_mu)**2d0 < energy_difference .and. &
-                                & energy_difference <= energy_difference_boundary ) then
-                                amax(count_s, count_i, count_mu) = sqrt(energy_difference)
-                            else if ( amin(count_s, count_i, count_mu)**2d0 < energy_difference .and. &
-                                & energy_difference > energy_difference_boundary ) then
-                                amax(count_s, count_i, count_mu) = sqrt(energy_difference_boundary)
-                            end if
-                        end do  !count_mu
-
-                    end if
-                end if !count_i
-
+            else
                 do count_mu = 1, adiabatic_invariant_grid_number
-                    if ( amax(count_s, count_i, count_mu) < alim(count_s, count_i, count_mu) ) then
-                        alim(count_s, count_i, count_mu) = amax(count_s, count_i, count_mu)
-                    else if ( amax(count_s, count_i, count_mu) > alim(count_s, count_i, count_mu) ) then
-                        amax(count_s, count_i, count_mu) = alim(count_s, count_i, count_mu)
+
+                    if ( count_i < injection_grid_number(count_s) .or. injection_grid_number(count_s) == real_grid_number ) then
+                        Emax_grid = 1
+                        do count4max = 1, count_i - 1
+
+                            if ( potential_plus_Bmu(count_s, count4max, count_mu) &
+                                & > potential_plus_Bmu(count_s, Emax_grid, count_mu) ) then
+                                Emax_grid = count4max
+                            end if
+
+                        end do  !count4max
+                        
+                    else if (count_i > injection_grid_number(count_s) .or. injection_grid_number(count_s) == 1) then
+                        Emax_grid = count_i + 1
+                        do count4max = count_i + 1, real_grid_number
+
+                            if ( potential_plus_Bmu(count_s, count4max, count_mu) &
+                            & > potential_plus_Bmu(count_s, Emax_grid, count_mu) ) then
+                                Emax_grid = count4max
+                            end if
+
+                        end do  !count4max
+
                     end if
+
+                    energy_difference = potential_plus_Bmu(count_s, Emax_grid, count_mu) &
+                        & - potential_plus_Bmu(count_s, count_i, count_mu)
+
+                    energy_difference_boundary = potential_plus_Bmu(count_s, injection_grid_number(count_s), count_mu) &
+                        & - potential_plus_Bmu(count_s, count_i, count_mu) &
+                        & + 5d-1 * particle_mass(count_s) * (alpha_lightspeed * speed_of_light)**2d0
+
+                    if ( energy_difference <= amin(count_s, count_i, count_mu)**2d0 .or. &
+                        & energy_difference_boundary <= amin(count_s, count_i, count_mu)**2d0 ) then
+                        amax(count_s, count_i, count_mu) = amin(count_s, count_i, count_mu)
+
+                    else if ( amin(count_s, count_i, count_mu)**2d0 < energy_difference .and. &
+                        & energy_difference <= energy_difference_boundary ) then
+                        amax(count_s, count_i, count_mu) = sqrt(energy_difference)
+                            
+                    else if ( amin(count_s, count_i, count_mu)**2d0 < energy_difference .and. &
+                        & energy_difference > energy_difference_boundary ) then
+                        amax(count_s, count_i, count_mu) = sqrt(energy_difference_boundary)
+
+                    end if
+
                 end do  !count_mu
 
-            
-            end do  !count_i
-            !$omp end do
-            !$omp end parallel
-        
-        end if
+            end if
+
+        end do  !count_i
+        !$omp end do
+        !$omp end parallel
+
         print *, 'count_s = ', count_s
 
     end do  !count_s
