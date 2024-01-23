@@ -7,8 +7,8 @@ grid_ionosphere_middle = 14
 grid_middle_magnetosphere = 109
 grid_fix = 175
 
-BC_number = 11
-min_number = 174
+BC_number = 12
+min_number = 149
 
 channel = 1
 

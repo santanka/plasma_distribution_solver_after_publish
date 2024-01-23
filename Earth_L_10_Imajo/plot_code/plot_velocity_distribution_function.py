@@ -8,8 +8,8 @@ grid_ionosphere_middle = 14
 grid_middle_magnetosphere = 109
 grid_fix = 175
 
-BC_number = 11
-min_number = 174
+BC_number = 12
+min_number = 149
 
 grid_number = 242
 
@@ -53,8 +53,7 @@ v_perp_b_1                  = data_1[3, :]
 v_para_b_1                  = data_1[4, :]
 distribution_function_1     = data_1[5, :]
 differential_flux_1         = data_1[6, :]
-mo, _ = stats.mode(mlat_deg_1_array)
-mlat_deg_1 = mo[0]
+mlat_deg_1 = mlat_deg_1_array[0]
 length2planet_1 = planet_radius * l_shell * np.cos(np.deg2rad(mlat_deg_1))**2E0
 
 mlat_deg_2_array            = data_2[0, :]
@@ -64,8 +63,7 @@ v_perp_b_2                  = data_2[3, :]
 v_para_b_2                  = data_2[4, :]
 distribution_function_2     = data_2[5, :]
 differential_flux_2         = data_2[6, :]
-mo, _ = stats.mode(mlat_deg_2_array)
-mlat_deg_2 = mo[0]
+mlat_deg_2 = mlat_deg_2_array[0]
 length2planet_2 = planet_radius * l_shell * np.cos(np.deg2rad(mlat_deg_2))**2E0
 
 def make_nan(v_perp, v_para, distribution_function):

@@ -8,8 +8,8 @@ grid_ionosphere_middle = 14
 grid_middle_magnetosphere = 109
 grid_fix = 175
 
-BC_number = 11
-min_number = 174
+BC_number = 12
+min_number = 149
 
 grid_number = 242
 
@@ -53,7 +53,7 @@ number_density_1 = data_all[6+series_1, grid_number-1]
 number_density_2 = data_all[6+series_2, grid_number-1]
 number_density_3 = data_all[6+series_3, grid_number-1]
 mlat_deg = data_all[3, grid_number]
-length2planet_per_R = data_all[1, grid_number] / planet_radius
+length2planet_per_R = data_all[1, grid_number-1] / planet_radius
 
 print(mlat_deg)
 print(length2planet_per_R)
