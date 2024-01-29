@@ -7,8 +7,8 @@ grid_ionosphere_middle = 14
 grid_middle_magnetosphere = 109
 grid_fix = 175
 
-BC_number = 12
-min_number = 149
+BC_number = 14
+min_number = 162
 
 channel = 1
 
@@ -180,7 +180,8 @@ if (channel == 1):
     ax3 = fig.add_subplot(gs[8:10, 0:6], xlabel=r'Geocentric distance [$\mathrm{R}_{\mathrm{E}}$]', ylabel=r'$\phi$ [$\mathrm{V}$]')
     ax3.set_title(r'(c)', x=-0.1, y=0.95)
     ax3.plot(length2planet_half_planet_radius, electrostatic_potential_half, linewidth='4', c='blue')
-    ax3.set_ylim(-1, 27)
+    electrostatic_potential_half_min = np.min(electrostatic_potential_half)
+    ax3.set_ylim(electrostatic_potential_half_min-1, -electrostatic_potential_half_min+1)
     ax3.minorticks_on()
     ax3.grid(which="both", alpha=0.3)
 
