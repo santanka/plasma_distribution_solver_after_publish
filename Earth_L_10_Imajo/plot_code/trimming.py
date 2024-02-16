@@ -87,12 +87,12 @@ def main(input_path, output_path):
         print("Unsupported file type:", ext)
 
 
-grid_ionosphere_middle = 14
+grid_ionosphere_middle = 29
 grid_middle_magnetosphere = 109
 grid_fix = 175
 
-BC_number = 18
-min_number = 113
+BC_number = 19
+min_number = 162
 
 dir_name = f'/mnt/j/plasma_distribution_solver_after_publish/Earth_L_10_Imajo/alpha_perp_12_parallel_12/grid_{str(grid_ionosphere_middle).zfill(3)}_{str(grid_middle_magnetosphere).zfill(3)}_{str(grid_fix).zfill(3)}/'
 dir_BC_name = f'boundary_condition_{str(BC_number)}/'

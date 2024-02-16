@@ -53,7 +53,7 @@ ax.plot(field_line_x, field_line_y, color='purple', linewidth='4')
 
 
 #potential drop point
-first_drop_R_from_center = 2E0 #[RE]
+first_drop_R_from_center = 3E0 #[RE]
 second_drop_R_from_center = 8E0 #[RE]
 
 first_drop_point_mlat = np.arccos(np.sqrt(first_drop_R_from_center / Earth_l_shell))
@@ -65,10 +65,10 @@ first_drop_point_y = first_drop_R_from_center * np.sin(first_drop_point_mlat)
 second_drop_point_x = second_drop_R_from_center * np.cos(second_drop_point_mlat)
 second_drop_point_y = second_drop_R_from_center * np.sin(second_drop_point_mlat)
 
-#ax.scatter(first_drop_point_x, first_drop_point_y, marker='D', s=200, c='orangered', zorder=5)
-#ax.scatter(first_drop_point_x, -first_drop_point_y, marker='D', s=200, c='orangered', zorder=5)
-#ax.scatter(second_drop_point_x, second_drop_point_y, marker='D', s=200, c='orangered', zorder=5)
-#ax.scatter(second_drop_point_x, -second_drop_point_y, marker='D', s=200, c='orangered', zorder=5)
+ax.scatter(first_drop_point_x, first_drop_point_y, marker='D', s=200, c='orangered', zorder=5)
+ax.scatter(first_drop_point_x, -first_drop_point_y, marker='D', s=200, c='orangered', zorder=5)
+ax.scatter(second_drop_point_x, second_drop_point_y, marker='D', s=200, c='orangered', zorder=5)
+ax.scatter(second_drop_point_x, -second_drop_point_y, marker='D', s=200, c='orangered', zorder=5)
 
 
 #boundary dot plot
@@ -95,10 +95,10 @@ ax.text(0,  1.4, r"$10 \, \mathrm{kV}$", ha='center', va='center', fontsize=50)
 ax.text(0, -1.4, r"$10 \, \mathrm{kV}$", ha='center', va='center', fontsize=50)
 ax.text(10.5, -0.3, r"$0 \, \mathrm{V}$", ha='center', va='center', fontsize=50)
 
-#ax.text(first_drop_point_x-0.6, first_drop_point_y, r"$2 \, \mathrm{R_{E}}$", ha='center', va='center', fontsize=50)
-#ax.text(second_drop_point_x+0.6, second_drop_point_y, r"$8 \, \mathrm{R_{E}}$", ha='center', va='center', fontsize=50)
-#ax.text(first_drop_point_x-0.6, -first_drop_point_y, r"$2 \, \mathrm{R_{E}}$", ha='center', va='center', fontsize=50)
-#ax.text(second_drop_point_x+0.6, -second_drop_point_y, r"$8 \, \mathrm{R_{E}}$", ha='center', va='center', fontsize=50)
+ax.text(first_drop_point_x-0.6, first_drop_point_y, r"$3 \, \mathrm{R_{E}}$", ha='center', va='center', fontsize=50)
+ax.text(second_drop_point_x+0.6, second_drop_point_y, r"$8 \, \mathrm{R_{E}}$", ha='center', va='center', fontsize=50)
+ax.text(first_drop_point_x-0.6, -first_drop_point_y, r"$3 \, \mathrm{R_{E}}$", ha='center', va='center', fontsize=50)
+ax.text(second_drop_point_x+0.6, -second_drop_point_y, r"$8 \, \mathrm{R_{E}}$", ha='center', va='center', fontsize=50)
 
 ax.minorticks_on()
 ax.grid(which='both', alpha=0.3)
