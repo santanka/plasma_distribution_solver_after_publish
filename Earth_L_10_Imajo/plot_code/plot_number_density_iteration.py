@@ -7,8 +7,8 @@ grid_ionosphere_middle = 29
 grid_middle_magnetosphere = 109
 grid_fix = 175
 
-BC_number = 19
-min_number = 162
+BC_number = 20
+min_number = 164
 
 l_shell = 10E0
 series_number = 12
