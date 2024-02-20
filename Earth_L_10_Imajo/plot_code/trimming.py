@@ -91,8 +91,8 @@ grid_ionosphere_middle = 29
 grid_middle_magnetosphere = 109
 grid_fix = 175
 
-BC_number = 20
-min_number = 164
+BC_number = 21
+min_number = 110
 
 dir_name = f'/mnt/j/plasma_distribution_solver_after_publish/Earth_L_10_Imajo/alpha_perp_12_parallel_12/grid_{str(grid_ionosphere_middle).zfill(3)}_{str(grid_middle_magnetosphere).zfill(3)}_{str(grid_fix).zfill(3)}/'
 dir_BC_name = f'boundary_condition_{str(BC_number)}/'
