@@ -4,18 +4,21 @@ import matplotlib.pyplot as plt
 from scipy import stats
 import os
 
-grid_ionosphere_middle = 14
+grid_ionosphere_middle = 29
 grid_middle_magnetosphere = 109
 grid_fix = 175
 
-BC_number = 12
-min_number = 149
+BC_number = 21
+min_number = 110
 
-grid_number = 242
+grid_number = 277
 
 series_1 = 10   # Magnetospheric electrons
+alpha_1 = r'5.E-1'
 series_2 = 12   # Trapped electrons
+alpha_2 = r'5.E-1'
 series_3 = 4   # Ionospheric hot electrons
+alpha_3 = r'1.E-1'
 
 l_shell = 10E0
 planet_radius = 6378.1E3
@@ -34,13 +37,13 @@ dir_BC_name = f'boundary_condition_{str(BC_number)}/'
 file_all_name = f'all/all_{str(min_number).zfill(3)}.csv'
 path_all_name = f'{dir_name}{dir_BC_name}{file_all_name}'
 
-file_velocity_distribution_function_name_1 = f'velocity_distribution_function/min_{str(min_number).zfill(3)}_grid_{str(grid_number).zfill(3)}_series_{str(series_1).zfill(2)}.csv'
+file_velocity_distribution_function_name_1 = f'velocity_distribution_function/min_{str(min_number).zfill(3)}_grid_{str(grid_number).zfill(3)}_series_{str(series_1).zfill(2)}_alpha_{alpha_1}.csv'
 path_velocity_distribution_function_name_1 = f'{dir_name}{dir_BC_name}{file_velocity_distribution_function_name_1}'
 
-file_velocity_distribution_function_name_2 = f'velocity_distribution_function/min_{str(min_number).zfill(3)}_grid_{str(grid_number).zfill(3)}_series_{str(series_2).zfill(2)}.csv'
+file_velocity_distribution_function_name_2 = f'velocity_distribution_function/min_{str(min_number).zfill(3)}_grid_{str(grid_number).zfill(3)}_series_{str(series_2).zfill(2)}_alpha_{alpha_2}.csv'
 path_velocity_distribution_function_name_2 = f'{dir_name}{dir_BC_name}{file_velocity_distribution_function_name_2}'
 
-file_velocity_distribution_function_name_3 = f'velocity_distribution_function/min_{str(min_number).zfill(3)}_grid_{str(grid_number).zfill(3)}_series_{str(series_3).zfill(2)}.csv'
+file_velocity_distribution_function_name_3 = f'velocity_distribution_function/min_{str(min_number).zfill(3)}_grid_{str(grid_number).zfill(3)}_series_{str(series_3).zfill(2)}_alpha_{alpha_3}.csv'
 path_velocity_distribution_function_name_3 = f'{dir_name}{dir_BC_name}{file_velocity_distribution_function_name_3}'
 
 print(path_all_name)

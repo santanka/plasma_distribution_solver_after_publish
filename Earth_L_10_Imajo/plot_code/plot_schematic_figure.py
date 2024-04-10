@@ -35,7 +35,7 @@ ax.plot(Earth_x_altitude, Earth_y_altitude, color='darkgoldenrod', linewidth='4'
 
 
 #magnetic field line plot
-Earth_l_shell = 10E0
+Earth_l_shell = 9E0
 
 a_req_b = Earth_equatorial_radius**2E0 + 2E0 * Earth_l_shell * Earth_start_altitude - np.abs(Earth_polar_radius)**2E0
 Earth_mlat_1 = (a_req_b + np.sqrt(a_req_b**2E0 + 4E0 * Earth_l_shell**2E0 * (Earth_polar_radius**2E0 - np.abs(Earth_start_altitude)**2E0))) / 2E0 / Earth_l_shell**2E0
@@ -53,52 +53,52 @@ ax.plot(field_line_x, field_line_y, color='purple', linewidth='4')
 
 
 #potential drop point
-first_drop_R_from_center = 3E0 #[RE]
-second_drop_R_from_center = 8E0 #[RE]
-
-first_drop_point_mlat = np.arccos(np.sqrt(first_drop_R_from_center / Earth_l_shell))
-second_drop_point_mlat = np.arccos(np.sqrt(second_drop_R_from_center / Earth_l_shell))
-
-first_drop_point_x = first_drop_R_from_center * np.cos(first_drop_point_mlat)
-first_drop_point_y = first_drop_R_from_center * np.sin(first_drop_point_mlat)
-
-second_drop_point_x = second_drop_R_from_center * np.cos(second_drop_point_mlat)
-second_drop_point_y = second_drop_R_from_center * np.sin(second_drop_point_mlat)
-
-ax.scatter(first_drop_point_x, first_drop_point_y, marker='D', s=200, c='orangered', zorder=5)
-ax.scatter(first_drop_point_x, -first_drop_point_y, marker='D', s=200, c='orangered', zorder=5)
-ax.scatter(second_drop_point_x, second_drop_point_y, marker='D', s=200, c='orangered', zorder=5)
-ax.scatter(second_drop_point_x, -second_drop_point_y, marker='D', s=200, c='orangered', zorder=5)
-
-
-#boundary dot plot
-ax.scatter(field_line_x[0], field_line_y[0], marker='s', s=200, c='orangered', zorder=5)
-ax.scatter(field_line_x[-1], field_line_y[-1], marker='s', s=200, c='orangered', zorder=5)
-ax.scatter(Earth_l_shell, 0, marker='s', s=200, c='orangered', zorder=5)
-
-
-#text
-ax.text(0, 0, r"Earth", ha='center', va='center', fontsize=80)
-
-ax.text(1.6, field_line_y[-1] + 0.3, r"North", ha='center', va='center', fontsize=50)
-ax.text(1.6, field_line_y[-1] + 0.0, r"ionospheric", ha='center', va='center', fontsize=50)
-ax.text(1.6, field_line_y[-1] - 0.3, r"end", ha='center', va='center', fontsize=50)
-
-ax.text(1.6, field_line_y[0] + 0.3, r"South", ha='center', va='center', fontsize=50)
-ax.text(1.6, field_line_y[0] + 0.0, r"ionospheric", ha='center', va='center', fontsize=50)
-ax.text(1.6, field_line_y[0] - 0.3, r"end", ha='center', va='center', fontsize=50)
-
-ax.text(10.8, 0.4, r"magnetic", ha='center', va='center', fontsize=50)
-ax.text(10.8, 0.1, r"equator", ha='center', va='center', fontsize=50)
-
-ax.text(0,  1.4, r"$10 \, \mathrm{kV}$", ha='center', va='center', fontsize=50)
-ax.text(0, -1.4, r"$10 \, \mathrm{kV}$", ha='center', va='center', fontsize=50)
-ax.text(10.5, -0.3, r"$0 \, \mathrm{V}$", ha='center', va='center', fontsize=50)
-
-ax.text(first_drop_point_x-0.6, first_drop_point_y, r"$3 \, \mathrm{R_{E}}$", ha='center', va='center', fontsize=50)
-ax.text(second_drop_point_x+0.6, second_drop_point_y, r"$8 \, \mathrm{R_{E}}$", ha='center', va='center', fontsize=50)
-ax.text(first_drop_point_x-0.6, -first_drop_point_y, r"$3 \, \mathrm{R_{E}}$", ha='center', va='center', fontsize=50)
-ax.text(second_drop_point_x+0.6, -second_drop_point_y, r"$8 \, \mathrm{R_{E}}$", ha='center', va='center', fontsize=50)
+#first_drop_R_from_center = 3E0 #[RE]
+#second_drop_R_from_center = 8E0 #[RE]
+#
+#first_drop_point_mlat = np.arccos(np.sqrt(first_drop_R_from_center / Earth_l_shell))
+#second_drop_point_mlat = np.arccos(np.sqrt(second_drop_R_from_center / Earth_l_shell))
+#
+#first_drop_point_x = first_drop_R_from_center * np.cos(first_drop_point_mlat)
+#first_drop_point_y = first_drop_R_from_center * np.sin(first_drop_point_mlat)
+#
+#second_drop_point_x = second_drop_R_from_center * np.cos(second_drop_point_mlat)
+#second_drop_point_y = second_drop_R_from_center * np.sin(second_drop_point_mlat)
+#
+#ax.scatter(first_drop_point_x, first_drop_point_y, marker='D', s=200, c='orangered', zorder=5)
+#ax.scatter(first_drop_point_x, -first_drop_point_y, marker='D', s=200, c='orangered', zorder=5)
+#ax.scatter(second_drop_point_x, second_drop_point_y, marker='D', s=200, c='orangered', zorder=5)
+#ax.scatter(second_drop_point_x, -second_drop_point_y, marker='D', s=200, c='orangered', zorder=5)
+#
+#
+##boundary dot plot
+#ax.scatter(field_line_x[0], field_line_y[0], marker='s', s=200, c='orangered', zorder=5)
+#ax.scatter(field_line_x[-1], field_line_y[-1], marker='s', s=200, c='orangered', zorder=5)
+#ax.scatter(Earth_l_shell, 0, marker='s', s=200, c='orangered', zorder=5)
+#
+#
+##text
+#ax.text(0, 0, r"Earth", ha='center', va='center', fontsize=80)
+#
+#ax.text(1.6, field_line_y[-1] + 0.3, r"North", ha='center', va='center', fontsize=50)
+#ax.text(1.6, field_line_y[-1] + 0.0, r"ionospheric", ha='center', va='center', fontsize=50)
+#ax.text(1.6, field_line_y[-1] - 0.3, r"end", ha='center', va='center', fontsize=50)
+#
+#ax.text(1.6, field_line_y[0] + 0.3, r"South", ha='center', va='center', fontsize=50)
+#ax.text(1.6, field_line_y[0] + 0.0, r"ionospheric", ha='center', va='center', fontsize=50)
+#ax.text(1.6, field_line_y[0] - 0.3, r"end", ha='center', va='center', fontsize=50)
+#
+#ax.text(10.8, 0.4, r"magnetic", ha='center', va='center', fontsize=50)
+#ax.text(10.8, 0.1, r"equator", ha='center', va='center', fontsize=50)
+#
+#ax.text(0,  1.4, r"$3.5 \, \mathrm{kV}$", ha='center', va='center', fontsize=50)
+#ax.text(0, -1.4, r"$3.5 \, \mathrm{kV}$", ha='center', va='center', fontsize=50)
+#ax.text(10.5, -0.3, r"$0 \, \mathrm{V}$", ha='center', va='center', fontsize=50)
+#
+#ax.text(first_drop_point_x-0.6, first_drop_point_y, r"$3 \, \mathrm{R_{E}}$", ha='center', va='center', fontsize=50)
+#ax.text(second_drop_point_x+0.6, second_drop_point_y, r"$8 \, \mathrm{R_{E}}$", ha='center', va='center', fontsize=50)
+#ax.text(first_drop_point_x-0.6, -first_drop_point_y, r"$3 \, \mathrm{R_{E}}$", ha='center', va='center', fontsize=50)
+#ax.text(second_drop_point_x+0.6, -second_drop_point_y, r"$8 \, \mathrm{R_{E}}$", ha='center', va='center', fontsize=50)
 
 ax.minorticks_on()
 ax.grid(which='both', alpha=0.3)

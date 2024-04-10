@@ -4,19 +4,21 @@ import matplotlib.pyplot as plt
 from scipy import stats
 import os
 
-grid_ionosphere_middle = 14
+grid_ionosphere_middle = 29
 grid_middle_magnetosphere = 109
 grid_fix = 175
 
-BC_number = 12
-min_number = 149
+BC_number = 21
+min_number = 110
 
-grid_number = 242
+grid_number = 277
 
-series_1 = 10
-series_1_name = r'$\mathrm{e^{-}}$ (Magnetosphere) ($v_{\parallel i} > 0$)'
-series_2 = 12
-series_2_name = r'$\mathrm{e^{-}}$ (Trapped)'
+series_1 = 2
+series_1_name = r'$\mathrm{H^{+}}$ (I)'
+alpha_1 = r'1.E-3'
+series_2 = 10
+series_2_name = r'$\mathrm{e^{-}}$ (M)'
+alpha_2 = r'5.E-1'
 
 channel = 1
 
@@ -34,10 +36,10 @@ elif (series_number == 10):
 dir_name = f'/mnt/j/plasma_distribution_solver_after_publish/Earth_L_10_Imajo/alpha_perp_12_parallel_12/grid_{str(grid_ionosphere_middle).zfill(3)}_{str(grid_middle_magnetosphere).zfill(3)}_{str(grid_fix).zfill(3)}/'
 dir_BC_name = f'boundary_condition_{str(BC_number)}/'
 
-file_name_1 = f'velocity_distribution_function/min_{str(min_number).zfill(3)}_grid_{str(grid_number).zfill(3)}_series_{str(series_1).zfill(2)}.csv'
+file_name_1 = f'velocity_distribution_function/min_{str(min_number).zfill(3)}_grid_{str(grid_number).zfill(3)}_series_{str(series_1).zfill(2)}_alpha_{alpha_1}.csv'
 path_name_1 = f'{dir_name}{dir_BC_name}{file_name_1}'
 
-file_name_2 = f'velocity_distribution_function/min_{str(min_number).zfill(3)}_grid_{str(grid_number).zfill(3)}_series_{str(series_2).zfill(2)}.csv'
+file_name_2 = f'velocity_distribution_function/min_{str(min_number).zfill(3)}_grid_{str(grid_number).zfill(3)}_series_{str(series_2).zfill(2)}_alpha_{alpha_2}.csv'
 path_name_2 = f'{dir_name}{dir_BC_name}{file_name_2}'
 
 print(path_name_1)
@@ -55,6 +57,7 @@ distribution_function_1     = data_1[5, :]
 differential_flux_1         = data_1[6, :]
 mlat_deg_1 = mlat_deg_1_array[0]
 length2planet_1 = planet_radius * l_shell * np.cos(np.deg2rad(mlat_deg_1))**2E0
+print(np.nanmax(distribution_function_1))
 
 mlat_deg_2_array            = data_2[0, :]
 v_perp_i_2                  = data_2[1, :]
@@ -65,6 +68,7 @@ distribution_function_2     = data_2[5, :]
 differential_flux_2         = data_2[6, :]
 mlat_deg_2 = mlat_deg_2_array[0]
 length2planet_2 = planet_radius * l_shell * np.cos(np.deg2rad(mlat_deg_2))**2E0
+print(np.nanmax(distribution_function_2))
 
 def make_nan(v_perp, v_para, distribution_function):
     length = len(distribution_function)
@@ -95,7 +99,7 @@ mpl.rcParams['text.latex.preamble'] = r'\usepackage{bm}'
 mpl.rcParams['font.family'] = 'serif'
 mpl.rcParams['font.serif'] = ['Computer Modern Roman']
 mpl.rcParams['mathtext.fontset'] = 'cm'
-plt.rcParams["font.size"] = 20
+plt.rcParams["font.size"] = 25
 
 fig = plt.figure(figsize=(14, 18), dpi=100, tight_layout=True)
 fig.suptitle(r"Probability Density Function (scale=log10)")
@@ -129,9 +133,9 @@ if (channel == 1):
 
     cbar_title = r'$\log_{10} (f(r_{\parallel i}, \bm{v}_{i}) / n(r_{\parallel i}))$'
 
-    plot_distribution_function_vpara(211, axlabel_x, axlabel_y, axtitle_1, cbar_title, v_perp_i_1, v_para_i_1, distribution_function_1)
+    plot_distribution_function_nonvpara(211, axlabel_x, axlabel_y, axtitle_1, cbar_title, v_perp_i_1, v_para_i_1, distribution_function_1)
     plot_distribution_function_nonvpara(212, axlabel_x, axlabel_y, axtitle_2, cbar_title, v_perp_i_2, v_para_i_2, distribution_function_2)
 
-    file_name_3 = f'plot/probably_density_function_comparison_min_{str(min_number).zfill(3)}_grid_{str(grid_number).zfill(3)}_series_{str(series_1).zfill(2)}_and_{str(series_2).zfill(2)}'
+    file_name_3 = f'plot/probably_density_function_comparison_min_{str(min_number).zfill(3)}_grid_{str(grid_number).zfill(3)}_series_{str(series_1).zfill(2)}_alpha_{alpha_1}_and_{str(series_2).zfill(2)}_alpha_{alpha_2}'
     plt.savefig(f'{dir_name}{dir_BC_name}{file_name_3}.png')
     #plt.show()
