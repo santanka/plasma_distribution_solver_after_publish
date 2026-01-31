@@ -7,22 +7,22 @@ mpl.rcParams['font.family'] = 'serif'
 mpl.rcParams['font.serif'] = ['Computer Modern Roman']
 mpl.rcParams['mathtext.fontset'] = 'cm'
 
-plt.rcParams["font.size"] = 40
+plt.rcParams["font.size"] = 50
 
-fig = plt.figure(figsize=(24, 16), dpi=100, tight_layout=True)
-ax = fig.add_subplot(111, xlabel=r'[$\mathrm{R_{E}}$]', ylabel=r'[$\mathrm{R_{E}}$]', xlim=(-1.2, 7))
+fig = plt.figure(figsize=(22, 14), dpi=100, tight_layout=True)
+ax = fig.add_subplot(111, xlabel=r'[$\mathrm{R_{E}}$]', ylabel=r'[$\mathrm{R_{E}}$]', xlim=(-1.5, 9.5), ylim=(0, 3.5))
 
 #Earth plot
 Earth_radius = 6.3781E6 #[m]
 Earth_equatorial_radius = 6.3781E6 / Earth_radius #[RE]
 Earth_polar_radius = 6.3568E6 / Earth_radius #[RE]
 
-mlat_rad_2pi = np.linspace(0E0, 2E0 * np.pi, 10000)
+mlat_rad_2pi = np.linspace(0E0, 1E0 * np.pi, 10000)
 
 Earth_x = Earth_equatorial_radius * np.cos(mlat_rad_2pi)
 Earth_y = Earth_polar_radius * np.sin(mlat_rad_2pi)
 
-ax.plot(Earth_x, Earth_y, color='darkgoldenrod', linewidth='4')
+#ax.plot(Earth_x, Earth_y, color='darkgoldenrod', linewidth='4')
 
 
 #altitude 500 km plot
@@ -31,7 +31,8 @@ Earth_start_altitude = 500E3 / Earth_radius #[RE]
 Earth_x_altitude = (Earth_equatorial_radius + Earth_start_altitude) * np.cos(mlat_rad_2pi)
 Earth_y_altitude = (Earth_polar_radius + Earth_start_altitude) * np.sin(mlat_rad_2pi)
 
-ax.plot(Earth_x_altitude, Earth_y_altitude, color='darkgoldenrod', linewidth='4')
+#ax.plot(Earth_x_altitude, Earth_y_altitude, color='darkgoldenrod', linewidth='4')
+ax.plot(Earth_x_altitude, Earth_y_altitude, color='k', linewidth='4')
 
 
 #magnetic field line plot
@@ -42,6 +43,8 @@ Earth_mlat_1 = (a_req_b + np.sqrt(a_req_b**2E0 + 4E0 * Earth_l_shell**2E0 * (Ear
 Earth_mlat_1 = - np.arccos(np.sqrt(Earth_mlat_1))
 Earth_mlat_2 = - Earth_mlat_1
 
+Earth_mlat_1 = 0
+
 print(Earth_mlat_1*180E0/np.pi)
 
 mlat_rad = np.linspace(Earth_mlat_1, Earth_mlat_2, 10000)
@@ -49,8 +52,8 @@ mlat_rad = np.linspace(Earth_mlat_1, Earth_mlat_2, 10000)
 field_line_x = Earth_l_shell * np.cos(mlat_rad)**2E0 * np.cos(mlat_rad)
 field_line_y = Earth_l_shell * np.cos(mlat_rad)**2E0 * np.sin(mlat_rad)
 
-ax.plot(field_line_x, field_line_y, color='purple', linewidth='4')
-
+#ax.plot(field_line_x, field_line_y, color='purple', linewidth='4')
+ax.plot(field_line_x, field_line_y, color='k', linewidth='4')
 
 #potential drop point
 #first_drop_R_from_center = 3E0 #[RE]
@@ -103,7 +106,7 @@ ax.plot(field_line_x, field_line_y, color='purple', linewidth='4')
 ax.minorticks_on()
 ax.grid(which='both', alpha=0.3)
 
-plt.axis('equal')
+plt.axis('scaled')
 plt.show()
 
 
