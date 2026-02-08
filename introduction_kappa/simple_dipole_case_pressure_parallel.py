@@ -30,40 +30,32 @@ def n_over_Z_kappa(Bi, Bb, Be, kappa, T_anisotropy):
     if Bi > Be:
         Bi = Be
 
-    # --- 第1項（最新式：2k/(4k+1)）---
-    z1 = 1 - (2*(k-1)/(2*k-1)) * T_anisotropy * (Bi/Bb - 1)
-    term1 = (2*k/(4*k+1)) * (Bi/Bb) * hyp2f1(k+mp.mpf('0.5'), 1, 2*k+mp.mpf('1.5'), z1)
+    # --- 第1項 ---
+    term1   = 1. / (T_anisotropy + (1. - T_anisotropy) * Bb / Bi)
 
     # --- 第2項 ---
-    pref2 = (k/mp.sqrt(mp.pi)) * ((2*k-1)/(2*(k-1))) \
-            * (mp.gamma(k+1)/mp.gamma(k+mp.mpf('0.5'))) \
-            / T_anisotropy * (Bi/(Be-Bb))
+    pref2 = 1. / mp.sqrt(mp.pi) * mp.gamma(k + 1.) / mp.gamma(k - mp.mpf('0.5')) * Bi / Be / (T_anisotropy + (1. - T_anisotropy) * Bb / Be)
 
-    beta = (Be - Bi)/(Be - Bb)
-    alpha = (2*k-1)/(2*(k-1)) / T_anisotropy * (Bb/(Be-Bb))
+    alpha = T_anisotropy * (1. - Bi / Be) / (T_anisotropy + (1. - T_anisotropy) * Bb / Be)
 
     def integrand(z):
         z = mp.mpf(z)
 
-        w = (1 - z)**(2*k - mp.mpf('0.5'))
+        w = (1 - z)**(k - mp.mpf('1.5'))
 
-        A = 1 - (1 - alpha) * z
-        B = 1 - beta * z
+        A = 1 - alpha * z
 
-        zlim = beta * z
+        zlim = alpha * z
         if zlim < 0:
             zlim = mp.mpf('0')
         if zlim > 1:
             zlim = mp.mpf('1') - mp.eps
 
-        return w * (A**(-(k+1))) * (B**(-(k+mp.mpf('0.5')))) * incomplete_beta_Bz(mp.mpf('0.5'), k+mp.mpf('0.5'), zlim)
+        return w * (A**(-(k+mp.mpf('0.5')))) * incomplete_beta_Bz(mp.mpf('0.5'), k+mp.mpf('0.5'), zlim)
 
     I = mp.quad(integrand, [0, mp.mpf('0.5'), mp.mpf('0.9'), mp.mpf('0.99'), 1])
 
     val = mp.mpf('0.5') * (term1 + pref2 * I)
-    #val = mp.mpf('0.5') * (pref2 * I)
-    #val = mp.mpf('0.5') * (term1)
-
 
     # 微小虚部対策
     if isinstance(val, mp.mpc):
@@ -79,11 +71,10 @@ def nV_over_Zvth_kappa(Bi, Bb, Be, kappa, T_anisotropy):
     if Bi > Be:
         Bi = Be
 
-    # --- 第1項（最新式：2k/(4k+1)）---
-    z1 = 1. - 2. * (k - 1) / (2 * k - 1) * T_anisotropy * (Be / Bb - 1)
-    term1 = mp.sqrt(k) / 2 / k * mp.gamma(k+1) / mp.gamma(k+mp.mpf('0.5')) * (Bi/Bb) * hyp2f1(k, 1, 2*k+1, z1)
+    # --- 第1項 ---
+    term1 = 1. / 2. / mp.sqrt(mp.pi) / mp.sqrt(k - mp.mpf('1.5')) * mp.gamma(k - 1.) / mp.gamma(k - mp.mpf('1.5')) * Bi / Be / (T_anisotropy + (1. - T_anisotropy) * Bb / Be)
 
-    val = term1 / 2. / mp.sqrt(mp.pi)
+    val = term1
 
     # 微小虚部対策
     if isinstance(val, mp.mpc):
@@ -104,49 +95,35 @@ def Ppara_over_ZTpara_kappa(Bi, Bb, Be, kappa, T_anisotropy):
     V_theta = nV_Ztheta / n_Z
 
     # 1st term
-    z1 = 1. - 2. * (k - 1) / (2 * k - 1) * T_anisotropy * (Bi / Bb - 1)
-    term1 = 2. * k / (4*k - 1) * Bi / Bb * hyp2f1(k-mp.mpf('0.5'), 1, 2*k+mp.mpf('0.5'), z1)
-
-    # 2nd term
-    z2 = 1. - 2. * (k - 1) / (2 * k - 1) * T_anisotropy * (Bi / Bb - 1)
-    term2 = V_theta**2 * 2. * (2 * k - 1) / (4 * k + 1) * Bi / Bb * hyp2f1(k+mp.mpf('0.5'), 1, 2*k+mp.mpf('1.5'), z2)
-
-    # 3rd term
-    z3 = 1. - 2. * (k - 1) / (2 * k - 1) * T_anisotropy * (Be / Bb - 1)
-    term3 = - 1. / mp.sqrt(mp.pi) * V_theta * (2 * k - 1) / mp.sqrt(k) / k * mp.gamma(k+1) / mp.gamma(k+mp.mpf('0.5')) * Bi / Bb * hyp2f1(k, 1, 2*k+1, z3)
+    term1 = (1. + 2. * V_theta**2) / (T_anisotropy + (1. - T_anisotropy) * Bb / Bi) - 4. / mp.sqrt(np.pi) * V_theta / mp.sqrt(k - mp.mpf('1.5')) * mp.gamma(k - 1) / mp.gamma(k - mp.mpf('1.5')) * Bi / Be / (T_anisotropy + (1. - T_anisotropy) * Bb / Be)
 
     # 4th term
-    alpha_4 = 1. - (2 * k - 1) / (2 * (k - 1)) / T_anisotropy * (Bb / (Be - Bb))
-    beta_4  = (Be - Bi) / (Be - Bb)
+    alpha_4 = T_anisotropy * (1. - Bi / Be) / (T_anisotropy + (1. - T_anisotropy) * Bb / Be)
 
     def integrand_Ppara_1(z):
         z = mp.mpf(z)
 
-        w = (1 - z)**(2*k - mp.mpf('1.5'))
+        w = (1 - z)**(k - mp.mpf('2.5'))
         A = 1 - alpha_4 * z
-        B = 1 - beta_4 * z
-        return w * (A**(-(k+1))) * (B**(-(k-mp.mpf('0.5')))) * incomplete_beta_Bz(mp.mpf('1.5'), k-mp.mpf('0.5'), beta_4 * z)
+        return w * (A**(-(k-mp.mpf('0.5')))) * incomplete_beta_Bz(mp.mpf('1.5'), k-mp.mpf('0.5'), alpha_4 * z)
 
     I_Ppara_4 = mp.quad(integrand_Ppara_1, [0, mp.mpf('0.5'), mp.mpf('0.9'), mp.mpf('0.99'), 1])
-    term4 = 2. / mp.sqrt(mp.pi) * k * (k - mp.mpf('0.5'))**2 / (k - 1) * mp.gamma(k+1) / mp.gamma(k+mp.mpf('0.5')) / T_anisotropy * (Bi / (Be - Bb)) * I_Ppara_4
+    term4 = 2. / mp.sqrt(mp.pi) * mp.gamma(k + 1.) / mp.gamma(k-mp.mpf('1.5')) * Bi / Be / (T_anisotropy + (1. - T_anisotropy) * Bb / Be) * I_Ppara_4
 
     # 5th term
-    alpha_5 = 1. - (2 * k - 1) / (2 * (k - 1)) / T_anisotropy * (Bb / (Be - Bb))
-    beta_5  = (Be - Bi) / (Be - Bb)
+    alpha_5 = T_anisotropy * (1. - Bi / Be) / (T_anisotropy + (1. - T_anisotropy) * Bb / Be)
 
     def integrand_Ppara_2(z):
         z = mp.mpf(z)
 
-        w = (1 - z)**(2*k - mp.mpf('0.5'))
+        w = (1 - z)**(k - mp.mpf('1.5'))
         A = 1 - alpha_5 * z
-        B = 1 - beta_5 * z
-        return w * (A**(-(k+1))) * (B**(-(k+mp.mpf('0.5')))) * incomplete_beta_Bz(mp.mpf('0.5'), k+mp.mpf('0.5'), beta_5 * z)
+        return w * (A**(-(k+mp.mpf('0.5')))) * incomplete_beta_Bz(mp.mpf('0.5'), k+mp.mpf('0.5'), alpha_5 * z)
 
     I_Ppara_5 = mp.quad(integrand_Ppara_2, [0, mp.mpf('0.5'), mp.mpf('0.9'), mp.mpf('0.99'), 1])
-    term5 = 2. / mp.sqrt(mp.pi) * V_theta**2 * (k - mp.mpf('0.5'))**2 / (k - 1) * mp.gamma(k+1) / mp.gamma(k+mp.mpf('0.5')) / T_anisotropy * (Bi / (Be - Bb)) * I_Ppara_5
+    term5 = 2. / mp.sqrt(mp.pi) * V_theta**2 * mp.gamma(k + 1.) / mp.gamma(k-mp.mpf('0.5')) * Bi / Be / (T_anisotropy + (1. - T_anisotropy) * Bb / Be) * I_Ppara_5
 
-    val = mp.mpf('0.5') * (term1 + term2 + term3 + term4 + term5)
-    #val = mp.mpf('0.5') * (term5)
+    val = mp.mpf('0.5') * (term1 + term4 + term5)
 
     # 微小虚部対策
     if isinstance(val, mp.mpc):
@@ -182,7 +159,7 @@ def Ppara_over_ZTpara_kappa_parallel(Bi_array, Bb, Be, kappa, T_anisotropy, n_jo
 # ---- parameters ----
 Bb = 1.0
 Be = 400.0
-kappa_list = [2., 3., 5., 10., 100.]
+kappa_list = [2., 3., 5., 10., 20.]
 T_anisotropy_list = [1/5, 1/2, 1., 2., 5.]  # = Tperp / Tpara
 
 Bi_grid = np.logspace(np.log10(Bb), np.log10(Be), 400)
@@ -215,10 +192,11 @@ for iT, T_anisotropy in enumerate(T_anisotropy_list):
     ax.plot(Bi_grid, n_bimax[iT], c='0.3', lw=2, ls='--', label="bi-Maxwellian")
 
     ax.set_xscale('log')
+    ax.set_yscale('log')
     ax.set_xlim(left=1)
-    ax.set_ylim(bottom=0)
+    #ax.set_ylim(bottom=0)
     ax.set_xlabel(r"$B ( r_{\parallel i} ) / B ( r_{\parallel b} )$")
-    ax.set_ylabel(r"$P_{\parallel} / Z T_{\parallel b}$")
+    ax.set_ylabel(r"$P_{\parallel} / N_{b} T_{\parallel b}$")
     ax.set_title(r"$T_{\perp b}/T_{\parallel b}$ = " + str(T_anisotropy))
     ax.minorticks_on()
     ax.grid(which='both', alpha=0.3)

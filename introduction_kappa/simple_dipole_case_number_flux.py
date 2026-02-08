@@ -30,11 +30,10 @@ def nV_over_Zvth_kappa(Bi, Bb, Be, kappa, T_anisotropy):
     if Bi > Be:
         Bi = Be
 
-    # --- 第1項（最新式：2k/(4k+1)）---
-    z1 = 1. - 2. * (k - 1) / (2 * k - 1) * T_anisotropy * (Be / Bb - 1)
-    term1 = mp.sqrt(k) / 2 / k * mp.gamma(k+1) / mp.gamma(k+mp.mpf('0.5')) * (Bi/Bb) * hyp2f1(k, 1, 2*k+1, z1)
+    # --- 第1項 ---
+    term1 = 1. / 2. / mp.sqrt(mp.pi) * (k - mp.mpf('0.5')) * mp.sqrt(k - mp.mpf('1.5')) / k / (k - 1.) * mp.gamma(k + 1.) / mp.gamma(k + mp.mpf('0.5')) * Bi / Be / (T_anisotropy + (1. - T_anisotropy) * Bb / Be)
 
-    val = term1 / 2. / mp.sqrt(mp.pi)
+    val = term1
 
     # 微小虚部対策
     if isinstance(val, mp.mpc):
@@ -57,10 +56,10 @@ def nV_over_Zvth_biMaxwell(Bi, Bb, Be, T_anisotropy):
 # ---- parameters ----
 Bb = 1.0
 Be = 400.0
-kappa_list = [2., 3., 5., 10., 100.]
+kappa_list = [2., 3., 5., 10., 20.]
 T_anisotropy_list = [1/5, 1/2, 1., 2., 5.]  # = Tperp / Tpara
 
-Bi_grid = np.logspace(np.log10(Bb), np.log10(Be), 100)
+Bi_grid = np.logspace(np.log10(Bb), np.log10(Be), 400)
 Bi_grid[0]  = Bb
 Bi_grid[-1] = Be
 
@@ -93,7 +92,7 @@ for iT, T_anisotropy in enumerate(T_anisotropy_list):
     ax.set_yscale('log')
     ax.set_xlim(left=1)
     ax.set_xlabel(r"$B ( r_{\parallel i} ) / B ( r_{\parallel b} )$")
-    ax.set_ylabel(r"$n V_{\parallel} / Z \theta_{\parallel b}$")
+    ax.set_ylabel(r"$n V_{\parallel} / N_{b} \phi_{\parallel b}$")
     ax.set_title(r"$T_{\perp b}/T_{\parallel b}$ = " + str(T_anisotropy))
     ax.minorticks_on()
     ax.grid(which='both', alpha=0.3)
